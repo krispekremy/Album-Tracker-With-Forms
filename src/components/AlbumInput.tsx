@@ -1,5 +1,3 @@
-// this is the code I wrote to put at the top of each of the sections so that someone might be able to add an album to a list! I don't have any state code yet since this is just a static version of the app!
-
 import { ChangeEvent, useState } from "react";
 
 type AlbumInputProps = {
@@ -10,6 +8,7 @@ type AlbumInputProps = {
     image: string
   ) => void;
 };
+
 export default function AlbumInput({ addNewAlbum }: AlbumInputProps) {
   const [formValues, setFormValues] = useState({
     artist: "",
@@ -21,20 +20,33 @@ export default function AlbumInput({ addNewAlbum }: AlbumInputProps) {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) =>
     setFormValues({ ...formValues, [event.target.name]: event.target.value });
 
-  /*   const handleSubmit = (event: MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault()
-    
-  } */
+  const handleSubmit = () => {
+    addNewAlbum(
+      formValues.artist,
+      formValues.album,
+      formValues.link,
+      formValues.image
+    );
+
+    // Clear form fields after adding the album
+    setFormValues({
+      artist: "",
+      album: "",
+      link: "",
+      image: "",
+    });
+  };
 
   return (
-    <div className="border-end bg-info">
+    <div className="border-end bg-info rounded">
       <input
         name="artist"
         className="m-2"
         type="text"
         onChange={handleChange}
+        value={formValues.artist}
         placeholder="Artist Name"
-      ></input>
+      />
       <input
         className="m-2"
         name="album"
@@ -42,37 +54,25 @@ export default function AlbumInput({ addNewAlbum }: AlbumInputProps) {
         placeholder="Album Name"
         onChange={handleChange}
         value={formValues.album}
-      ></input>
-
+      />
       <input
         className="m-2"
         name="link"
         type="text"
         onChange={handleChange}
+        value={formValues.link}
         placeholder="Link"
-      ></input>
-
+      />
       <input
         className="m-2"
         name="image"
         type="text"
         onChange={handleChange}
+        value={formValues.image}
         placeholder="Image Link"
-      ></input>
-
+      />
       <br />
-      <button
-        onClick={() =>
-          addNewAlbum(
-            formValues.artist,
-            formValues.album,
-            formValues.link,
-            formValues.image
-          )
-        }
-      >
-        Add
-      </button>
+      <button onClick={handleSubmit}>Add</button>
     </div>
   );
 }
